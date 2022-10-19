@@ -3,7 +3,7 @@ import subprocess
 
 import boto3
 
-s3 = boto.client('s3')
+s3 = boto3.client('s3')
 
 def save_thumbnail(video_path, video_name, bucket):
     thumbnail_name = "{}.png".format(video_name[:-4])

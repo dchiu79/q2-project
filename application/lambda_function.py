@@ -8,10 +8,9 @@ import os
 from download import download_vid_to_tmp
 from thumbnail import save_thumbnail
 from video_trim import trim_uploaded_video
+from upload_video import upload_video_to_youtube
 
 print('Loading function')
-
-s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
     print("Received event: " + json.dumps(event, indent=2))
