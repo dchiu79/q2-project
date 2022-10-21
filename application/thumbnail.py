@@ -10,7 +10,7 @@ def save_thumbnail(video_path, video_name, bucket):
     thumbnail_path = "/tmp/{}".format(thumbnail_name)
     
     #ffmpeg command to screenshot a part of the video
-    ffmpeg_cmd = "/opt/ffmpeg -i {} -ss 00:00:01 -vframes 1 {}".format(video_path, thumbnail_path)
+    ffmpeg_cmd = "/opt/bin/ffmpeg -i {} -ss 00:00:01 -vframes 1 {}".format(video_path, thumbnail_path)
     
     cmd1 = shlex.split(ffmpeg_cmd)
     subprocess.run(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
