@@ -7,7 +7,6 @@ import urllib
 
 # User defined functions
 from download import download_vid_to_tmp
-from thumbnail import save_thumbnail
 from video_trim import trim_uploaded_video
 # from upload_video import upload_video_to_youtube
 
@@ -20,13 +19,19 @@ def lambda_handler(event, context):
 
     # Get the object from the event and show its content type
     bucket = event['Records'][0]['s3']['bucket']['name']
-    video_file_name = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
+    key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
+    
+    video_file_name = key[:key.index(" ")]
+    start_timestamp = key[key.index(" ")+1:key.index(" ", -1)]
+    end_timestamp = key[key.index(" ", -1)+1:]
+    print(video_file_name)
+    print(start_timestamp)
+    print(end_timestamp)
 
     video_path = download_vid_to_tmp(bucket, video_file_name)
     
-    trim_uploaded_video(video_path, video_file_name, bucket)
-    
-    # save_thumbnail(video_path, video_file_name, bucket)
+    trim_uploaded_video(video_path, video_file_name, bucket, start_timestamp, end_timestamp)
+
     
     return {
         'statusCode': 200,
