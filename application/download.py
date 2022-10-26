@@ -12,13 +12,12 @@ def download_vid_to_tmp(bucket, file_name):
     tmp_video_file_path = "/tmp/{}".format(file_name)
     s3_source_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':file_name}, ExpiresIn=120)
     
+    print("Temporary video path:", tmp_video_file_path)
+    
+    # ffmpeg command to copy the file to temporary directory 
     ffmpeg_cmd = "/opt/bin/ffmpeg -ss 00:00:00 -to 00:00:02 -i \"{}\" -c:v copy -c:a copy {}".format(s3_source_signed_url, tmp_video_file_path)
-    ffprobe_cmd = "/opt/bin/ffprobe -i \"{}\" -show_entries format=duration -v quiet -of csv=\"p=0\"".format(s3_source_signed_url)
     
     cmd1 = shlex.split(ffmpeg_cmd)
-    cmd2 = shlex.split(ffprobe_cmd)
-    
     subprocess.run(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    subprocess.run(cmd2, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
     
     return tmp_video_file_path
