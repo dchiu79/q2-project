@@ -7,6 +7,7 @@ import urllib
 
 # User defined functions
 from download import download_vid_to_tmp
+from thumbnail import save_thumbnail
 from video_trim import trim_uploaded_video
 # from upload_video import upload_video_to_youtube
 
@@ -24,6 +25,8 @@ def lambda_handler(event, context):
     video_path = download_vid_to_tmp(bucket, video_file_name)
     
     trim_uploaded_video(video_path, video_file_name, bucket)
+    
+    # save_thumbnail(video_path, video_file_name, bucket)
     
     return {
         'statusCode': 200,
