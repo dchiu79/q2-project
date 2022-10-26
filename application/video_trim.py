@@ -24,12 +24,6 @@ def trim_uploaded_video(video_path, video_file_name, bucket):
     
 def get_timestamps():
     http = urllib3.PoolManager()
-    # url = "http://jsonplaceholder.typicode.com/posts/"
-    # print(url)
-    # r = http.request("GET", url, fields={'id':'9'})
-    # print(r.data.decode("utf-8"))
-    # print("-------")
-    # print(r.data.decode("utf-8")[r.data.decode("utf-8").find("\"userId\":"):r.data.decode("utf-8").find("\"id\":")])
     
     url = "http://10.10.200.176:3000"
     print(url)
