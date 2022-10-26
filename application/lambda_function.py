@@ -25,8 +25,6 @@ def lambda_handler(event, context):
     
     trim_uploaded_video(video_path, video_file_name, bucket)
     
-    # save_thumbnail(video_path, video_file_name, bucket)
-    
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
