@@ -143,7 +143,7 @@ const uploadFile = (file, textone, texttwo) => {
       ACL: 'public-read',
       Body: file,
       Bucket: S3_BUCKET,
-      Key: textone + " " + texttwo + " " + file.name
+      Key: textone + "+" + texttwo + "+" + file.name
   };
 
   myBucket.putObject(params)
