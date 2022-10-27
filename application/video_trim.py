@@ -26,7 +26,7 @@ def trim_uploaded_video(video_path, video_file_name, bucket, video_timestamps):
     print("End:", end_timestamp)
     
     # ffmpeg command to trim a video based on two timestamps
-    ffmpeg_cmd = "/opt/bin/ffmpeg -i {} -ss {} -to {} -c:a copy -c:v copy {}".format(video_path, start_timestamp, end_timestamp, trimmed_video_path)
+    ffmpeg_cmd = "/opt/bin/ffmpeg -ss {} -to {} -i {} -c:a copy -c:v copy {}".format(start_timestamp, end_timestamp, video_path, trimmed_video_path)
     
     cmd1 = shlex.split(ffmpeg_cmd)
     subprocess.run(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

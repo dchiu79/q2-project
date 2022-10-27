@@ -15,7 +15,7 @@ def download_vid_to_tmp(bucket, file_name):
     print("Temporary video path:", tmp_video_file_path)
     
     # ffmpeg command to copy the file to temporary directory 
-    ffmpeg_cmd = "/opt/bin/ffmpeg -ss 00:00:00 -to 00:00:02 -i \"{}\" -c:v copy -c:a copy {}".format(s3_source_signed_url, tmp_video_file_path)
+    ffmpeg_cmd = "/opt/bin/ffmpeg -i {} -c:v copy -c:a copy {}".format(s3_source_signed_url, tmp_video_file_path)
     
     cmd1 = shlex.split(ffmpeg_cmd)
     subprocess.run(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
