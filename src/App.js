@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Nouislider from 'nouislider-react';
+
 import MultiRangeSlider from "multi-range-slider-react";
 import AWS from 'aws-sdk'
 import './App.css';
@@ -12,8 +12,6 @@ function App() {
   const [startTime, setStartTime] = useState(0);
   const [videoSrc, setVideoSrc] = useState('');
   const [videoFileValue, setVideoFileValue] = useState('');
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-  const [videoTrimmedUrl, setVideoTrimmedUrl] = useState('');
   const videoRef = useRef();
   let initialSliderValue = 0;
 
@@ -76,11 +74,12 @@ const handleInput = (e) => {
     }
     let time;
     // only mm:ss
-    if (hours === '00') {
-      time = minutes + ':' + seconds;
-    } else {
-      time = hours + ':' + minutes + ':' + seconds;
-    }
+    // if (hours === '00') {
+    //   time = minutes + ':' + seconds;
+    // } else {
+    //   time = hours + ':' + minutes + ':' + seconds;
+    // }
+    time = hours + '-' + minutes + '-' + seconds;
     return time;
   };
 
@@ -98,25 +97,25 @@ const handleInput = (e) => {
   }, [videoSrc]);
 
   //Called when handle of the nouislider is being dragged
-  const updateOnSliderChange = (values, handle) => {
-    setVideoTrimmedUrl('');
-    let readValue;
-    if (handle) {
-      readValue = values[handle] | 0;
-      if (endTime !== readValue) {
-        setEndTime(readValue);
-      }
-    } else {
-      readValue = values[handle] | 0;
-      if (initialSliderValue !== readValue) {
-        initialSliderValue = readValue;
-        if (videoRef && videoRef.current) {
-          videoRef.current.currentTime = readValue;
-          setStartTime(readValue);
-        }
-      }
-    }
-  };
+  // const updateOnSliderChange = (values, handle) => {
+  //   setVideoTrimmedUrl('');
+  //   let readValue;
+  //   if (handle) {
+  //     readValue = values[handle] | 0;
+  //     if (endTime !== readValue) {
+  //       setEndTime(readValue);
+  //     }
+  //   } else {
+  //     readValue = values[handle] | 0;
+  //     if (initialSliderValue !== readValue) {
+  //       initialSliderValue = readValue;
+  //       if (videoRef && videoRef.current) {
+  //         videoRef.current.currentTime = readValue;
+  //         setStartTime(readValue);
+  //       }
+  //     }
+  //   }
+  // };
 
   //Play the video when the button is clicked
   const handlePlay = () => {
@@ -128,8 +127,8 @@ const handleInput = (e) => {
   const REGION ='us-east-1';
   
   AWS.config.update({
-    accessKeyId: 'AKIAV6LX2FQIAQ2E23FL',
-    secretAccessKey: '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'
+    accessKeyId: '',
+    secretAccessKey: ''
 })
 
 const myBucket = new AWS.S3({
@@ -138,13 +137,13 @@ const myBucket = new AWS.S3({
 })
 const [progress , setProgress] = useState(0);
 // const [selectedFile, setSelectedFile] = useState(null);
-const uploadFile = (file) => {
+const uploadFile = (file, textone, texttwo) => {
 
   const params = {
       ACL: 'public-read',
       Body: file,
       Bucket: S3_BUCKET,
-      Key: file.name
+      Key: textone + " " + texttwo + " " + file.name
   };
 
   myBucket.putObject(params)
@@ -183,9 +182,10 @@ const uploadFile = (file) => {
           <br />
           <button onClick={handlePlay}>Play</button> &nbsp;
           
-          <div>Native SDK File Upload Progress is {progress}%</div>
+          <div>File Upload Progress is {progress}%</div>
         
-        <button onClick={() => uploadFile(videoFileValue)}> Upload to S3</button>
+        <button onClick={() => uploadFile(videoFileValue, convertToHHMMSS(minValue), convertToHHMMSS(maxValue))}> Upload to S3</button>
+        
         </React.Fragment>
       ) : (
         ''
