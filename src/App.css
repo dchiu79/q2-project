@@ -37,3 +37,18 @@
     transform: rotate(360deg);
   }
 }
+
+video{
+  width: 800px;
+  height: auto;
+}
+
+#bt{
+  margin: 10px;
+  background: purple;
+  
+}
+
+.bg-pb{
+  background-color: purple;
+}

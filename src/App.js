@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import MultiRangeSlider from "multi-range-slider-react";
 import AWS from 'aws-sdk'
+import 'bootstrap/dist/css/bootstrap.css';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import './App.css';
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -17,7 +21,7 @@ function App() {
 
 
 
-  const [minValue, set_minValue] = useState(25);
+const [minValue, set_minValue] = useState(25);
 const [maxValue, set_maxValue] = useState(75);
 const handleInput = (e) => {
   
@@ -57,7 +61,7 @@ const handleInput = (e) => {
 
 
   //Convert the time obtained from the video to HH:MM:SS format
-  const convertToHHMMSS = (val) => {
+  const convertToHMS = (val) => {
     const secNum = parseInt(val, 10);
     let hours = Math.floor(secNum / 3600);
     let minutes = Math.floor((secNum - hours * 3600) / 60);
@@ -73,13 +77,7 @@ const handleInput = (e) => {
       seconds = '0' + seconds;
     }
     let time;
-    // only mm:ss
-    // if (hours === '00') {
-    //   time = minutes + ':' + seconds;
-    // } else {
-    //   time = hours + ':' + minutes + ':' + seconds;
-    // }
-    time = hours + '-' + minutes + '-' + seconds;
+    time = hours + ':' + minutes + ':' + seconds;
     return time;
   };
 
@@ -127,8 +125,8 @@ const handleInput = (e) => {
   const REGION ='us-east-1';
   
   AWS.config.update({
-    accessKeyId: '',
-    secretAccessKey: ''
+    accessKeyId: 'AKIAV6LX2FQIPSSIJUPA',
+    secretAccessKey: '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'
 })
 
 const myBucket = new AWS.S3({
@@ -158,7 +156,10 @@ const uploadFile = (file, textone, texttwo) => {
   
   return (
     <div className="App">
-      <input type="file" onChange={handleFileUpload} />
+       <Form.Group controlId="formFile" className="mb-3">
+        <Form.Control type="file" size='sm' onChange={handleFileUpload}/>
+      </Form.Group>
+      {/* <input type="file" onChange={handleFileUpload} /> */}
       <br />
       {videoSrc.length ? (
         <React.Fragment>
@@ -176,16 +177,18 @@ const uploadFile = (file, textone, texttwo) => {
         onInput={handleInput}
       />
           <br />
-          <div>Start Point:{convertToHHMMSS(minValue)}&nbsp; End Point:{convertToHHMMSS(maxValue)} </div>
-          Start duration: {convertToHHMMSS(startTime)} &nbsp; Video duration:{' '}
-          {convertToHHMMSS(endTime)}
-          <br />
-          <button onClick={handlePlay}>Play</button> &nbsp;
+          <div>Start Point:{convertToHMS(minValue)}&nbsp; End Point:{convertToHMS(maxValue)} Video duration:{' '}
+          {convertToHMS(endTime)} </div>
           
-          <div>File Upload Progress is {progress}%</div>
+          {/* <button onClick={handlePlay}>Play</button> &nbsp; */}
+          
+          {/* <div>File Upload Progress is {progress}%</div> */}
+          <div>
+          <ProgressBar variant='pb' now={progress} label={`File Upload Progress ${progress}%`}></ProgressBar>
+          </div>
         
-        <button onClick={() => uploadFile(videoFileValue, convertToHHMMSS(minValue), convertToHHMMSS(maxValue))}> Upload to S3</button>
-        
+        {/* <button onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}> Upload to S3</button> */}
+        <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}>Upload</Button>{' '}
         </React.Fragment>
       ) : (
         ''
