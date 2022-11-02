@@ -7,7 +7,8 @@ import urllib
 
 # User defined functions
 from download import download_vid_to_tmp
-from video_trim import trim_uploaded_video
+from video_trim import trim_video
+from video_extend import extend_video
 # from upload_video import upload_video_to_youtube
 
 print('Loading function')
@@ -29,7 +30,11 @@ def lambda_handler(event, context):
 
     video_path = download_vid_to_tmp(bucket, video_file_name)
     
-    trim_uploaded_video(video_path, video_file_name, bucket, video_timestamps)
+    trimmed_video_path = trim_video(video_path, video_file_name, video_timestamps)
+    
+    extend_video(trimmed_video_path, video_file_name)
+    
+    # upload_video_to_youtube(output_video_path)
     
     return {
         'statusCode': 200,
