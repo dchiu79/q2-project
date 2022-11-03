@@ -125,8 +125,8 @@ const handleInput = (e) => {
   const REGION ='us-east-1';
   
   AWS.config.update({
-    accessKeyId: 'AKIAV6LX2FQIPSSIJUPA',
-    secretAccessKey: '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'
+    accessKeyId: '',
+    secretAccessKey: ''
 })
 
 const myBucket = new AWS.S3({
