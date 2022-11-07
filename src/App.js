@@ -1,14 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import MultiRangeSlider from "multi-range-slider-react";
 import AWS from 'aws-sdk'
 import 'bootstrap/dist/css/bootstrap.css';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+
+import {Routes, Route, useNavigate, Navigate} from 'react-router-dom';
+
+
+
 import './App.css';
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
+<link rel="stylesheet" href="/css/video-react.css" />
 
 function App() {
   const [videoDuration, setVideoDuration] = useState(0);
@@ -17,8 +22,12 @@ function App() {
   const [videoSrc, setVideoSrc] = useState('');
   const [videoFileValue, setVideoFileValue] = useState('');
   const videoRef = useRef();
+  const vid = document.getElementById("myvid");
   let initialSliderValue = 0;
-
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageTwo, setSelectedImageTwo] = useState(null);
+  const [startTimeValue,setStartTimeValue] = useState(0);
+  const [endTimeValue,setEndTimeValue] = useState(0);
 
 
 const [minValue, set_minValue] = useState(25);
@@ -121,6 +130,7 @@ const handleInput = (e) => {
       videoRef.current.play();
     }
   };
+
   const S3_BUCKET ='test-bucketvid';
   const REGION ='us-east-1';
   
@@ -153,6 +163,17 @@ const uploadFile = (file, textone, texttwo) => {
       })
 }
 
+
+
+ 
+  const handleStartChange = () =>{
+    setStartTimeValue(document.getElementById("sp").innerHTML = (convertToHMS(vid.currentTime)))
+  }
+
+  const handleEndChange = () =>{
+    setEndTimeValue(document.getElementById("ep").innerHTML = (convertToHMS(vid.currentTime)))
+
+  }
   
   return (
     <div className="App">
@@ -163,11 +184,11 @@ const uploadFile = (file, textone, texttwo) => {
       <br />
       {videoSrc.length ? (
         <React.Fragment>
-          <video src={videoSrc} ref={videoRef}  controls={true}>
+          <video id="myvid" src={videoSrc} ref={videoRef}  controls={true}>
             <source src={videoSrc} type={videoFileValue.type} />
           </video>
           <br />
-          <MultiRangeSlider
+          {/* <MultiRangeSlider
           
         min={0}
         max={Math.floor(videoDuration)}
@@ -175,20 +196,80 @@ const uploadFile = (file, textone, texttwo) => {
         minValue={startTime}
         maxValue={videoDuration}
         onInput={handleInput}
-      />
-          <br />
-          <div>Start Point:{convertToHMS(minValue)}&nbsp; End Point:{convertToHMS(maxValue)} Video duration:{' '}
-          {convertToHMS(endTime)} </div>
+        style={{barLeftColor:'purple'}}
+      /> */}
+       
+        
           
+          {/* <div>Start Point:{convertToHMS(minValue)}&nbsp; End Point:{convertToHMS(maxValue)} Video duration:{' '}
+          {convertToHMS(endTime)} </div> */}
+          <div>Start Point:<span id="sp">None</span> End Point:<span id="ep">None</span></div>
+          {/* <Button id="spt" variant="outline-primary" onClick={()=>getStartTime()}>Get start time</Button>
+          <Button id="ept" variant="outline-primary" onClick={()=>getEndTime()}>Get end time</Button> */}
           {/* <button onClick={handlePlay}>Play</button> &nbsp; */}
           
           {/* <div>File Upload Progress is {progress}%</div> */}
+          <Button id="spt" variant="outline-primary" onClick={handleStartChange}>Get start time</Button>
+          <Button id="ept" variant="outline-primary" onClick={handleEndChange}>Get end time</Button>
+      
+      
+      
+      
+      {selectedImage && (
+        <div>
+        <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
+        <br />
+        <Button variant='outline-danger' onClick={()=>setSelectedImage(null)}>Remove</Button>
+        </div>
+      )}
+      <br />
+     
+      <br /> 
+      <Button variant='dark'>
+      <input
+        type="file"
+        name="myImage"
+        onChange={(event) => {
+          console.log(event.target.files[0]);
+          setSelectedImage(event.target.files[0]);
+        }}
+      />
+      </Button>
+
+         
+{selectedImageTwo && (
+        <div>
+        <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImageTwo)} />
+        <br />
+        <Button variant='outline-danger' onClick={()=>setSelectedImageTwo(null)}>Remove</Button>
+        </div>
+      )}
+      <br />
+     
+      <br /> 
+      <Button variant='dark'>
+      <input
+        type="file"
+        name="myImage"
+        onChange={(event) => {
+          console.log(event.target.files[0])
+          setSelectedImageTwo(event.target.files[0]);
+        }}
+      />
+      </Button>
+      
+      
+
+
+
+
           <div>
           <ProgressBar variant='pb' now={progress} label={`File Upload Progress ${progress}%`}></ProgressBar>
           </div>
         
         {/* <button onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}> Upload to S3</button> */}
-        <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}>Upload</Button>{' '}
+        {/* <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}>Upload</Button>{' '} */}
+        <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, startTimeValue, endTimeValue)}>Upload</Button>{' '}
         </React.Fragment>
       ) : (
         ''
@@ -196,5 +277,10 @@ const uploadFile = (file, textone, texttwo) => {
     </div>
   );
 }
+
+
+
+
+
 
 export default App;
