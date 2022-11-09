@@ -43,3 +43,5 @@ def append_images_to_video(video_file_name, trimmed_video_path, start_image_path
     print("End still image video created")
     subprocess.run(cmd5, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print("Trimmed video and start/end still image videos concatenated")
+    
+    return output_video_name, output_video_path
