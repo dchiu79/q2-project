@@ -9,6 +9,7 @@ import urllib
 from download import download_objects_to_tmp
 from video_trim import trim_video
 from append_images import append_images_to_video
+from upload_to_s3 import upload_video_to_s3
 # from upload_video import upload_video_to_youtube
 
 print('Loading function')
@@ -36,7 +37,9 @@ def lambda_handler(event, context):
     
     trimmed_video_path = trim_video(video_path, video_file_name, video_timestamps)
     
-    append_images_to_video(video_file_name, trimmed_video_path, start_image_path, end_image_path)
+    output_video_name, output_video_path = append_images_to_video(video_file_name, trimmed_video_path, start_image_path, end_image_path)
+    
+    upload_video_to_s3(output_video_name, output_video_path)
     
     # upload_video_to_youtube(output_video_path)
     
