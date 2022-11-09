@@ -1,3 +1,4 @@
+# Imports that handle command processing
 import shlex
 import subprocess
 
@@ -27,6 +28,6 @@ def trim_video(video_path, video_file_name, video_timestamps):
     cmd1 = shlex.split(ffmpeg_cmd1)
     
     subprocess.run(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print("vtrim cmd1 done")
+    print("Trimmed the video")
     
     return trimmed_video_path
