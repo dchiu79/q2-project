@@ -2,6 +2,9 @@
 import shlex
 import subprocess
 
+# Import that handle file management
+import os
+
 import boto3
 
 # Initialize the s3 client
@@ -29,19 +32,24 @@ def append_images_to_video(video_file_name, trimmed_video_path, start_image_path
     ffmpeg_cmd5 = "/opt/bin/ffmpeg -i {} -i {} -i {} -filter_complex [0:v][0:a][1:v][1:a][2:v][2:a]concat=n=3:v=1:a=1[v][a] -map [v] -map [a] -fps_mode vfr {}"\
                     .format(start_video_path, trimmed_video_path, end_video_path, output_video_path)
     
+    # Makes the commands executable and runs them
     cmd1 = shlex.split(ffmpeg_cmd1)
     cmd2 = shlex.split(ffmpeg_cmd2)
     cmd3 = shlex.split(ffmpeg_cmd3)
     cmd4 = shlex.split(ffmpeg_cmd4)
     cmd5 = shlex.split(ffmpeg_cmd5)
-    
     subprocess.run(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     subprocess.run(cmd2, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print("Start still image video created")
     subprocess.run(cmd3, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     subprocess.run(cmd4, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print("End still image video created")
     subprocess.run(cmd5, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print("Trimmed video and start/end still image videos concatenated")
+    
+    # Logs to check if file was copied to directory
+    if not os.path.exists(start_video_path):
+        print("Failed to create still start image video")
+    if not os.path.exists(end_video_path):
+        print("Failed to create still end image video")
+    if not os.path.exists(output_video_path):
+        print("Failed to concatenate video")
     
     return output_video_name, output_video_path

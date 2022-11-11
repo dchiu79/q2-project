@@ -23,9 +23,9 @@ def lambda_handler(event, context):
     bucket = event['Records'][0]['s3']['bucket']['name']
     video_file_name = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
     
-    # Get start and end images
-    start_image = urllib.parse.unquote_plus(event['Records'][1]['s3']['object']['key'], encoding='utf-8')
-    end_image = urllib.parse.unquote_plus(event['Records'][2]['s3']['object']['key'], encoding='utf-8')
+    # Get the start and end images
+    start_image = urllib.parse.unquote_plus(event['Records'][0]['s3']['objectTwo']['key'], encoding='utf-8')
+    end_image = urllib.parse.unquote_plus(event['Records'][0]['s3']['objectThree']['key'], encoding='utf-8')
     
     # Make the file name suitable for extracting timestamps in the right format
     video_timestamps = video_file_name.replace("-", ":")

@@ -2,8 +2,8 @@
 import shlex
 import subprocess
 
-# Import for file management
-import shutil
+# Import that handles file management
+import os
 
 import boto3
 
@@ -24,16 +24,25 @@ def download_objects_to_tmp(bucket, file_name, start_image, end_image):
     tmp_end_image_path = "/tmp/{}".format(end_image)
     s3_end_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':end_image}, ExpiresIn=120)
     
-    # ffmpeg command to copy the video to the temporary directory 
+    # ffmpeg command to copy the video and images to the temporary directory 
     ffmpeg_cmd1 = "/opt/bin/ffmpeg -i {} -c:v copy -c:a copy {}".format(s3_video_signed_url, tmp_video_file_path)
+    ffmpeg_cmd2 = "/opt/bin/ffmpeg -i {} {}".format(s3_start_signed_url, tmp_start_image_path)
+    ffmpeg_cmd3 = "/opt/bin/ffmpeg -i {} {}".format(s3_end_signed_url, tmp_end_image_path)
     
+    # Makes the commands executable and runs them
     cmd1 = shlex.split(ffmpeg_cmd1)
+    cmd2 = shlex.split(ffmpeg_cmd2)
+    cmd3 = shlex.split(ffmpeg_cmd3)
     subprocess.run(cmd1, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print("Video copied to temporary directory")
+    subprocess.run(cmd2, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.run(cmd3, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
-    # Copying the start and end images to temporary directory
-    shutil.copy(s3_start_signed_url, tmp_start_image_path)
-    shutil.copy(s3_end_signed_url, tmp_end_image_path)
-    print("Start/End images copied to temporary directory")
+    # Logs to check if file was copied to directory
+    if not os.path.exists(tmp_video_file_path):
+        print("Failed to copy video to tmp")
+    if not os.path.exists(tmp_start_image_path):
+        print("Failed to copy start image to tmp")
+    if not os.path.exists(tmp_end_image_path):
+        print("Failed to copy end image to tmp")
     
     return tmp_video_file_path, tmp_start_image_path, tmp_end_image_path
