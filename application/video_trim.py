@@ -12,8 +12,8 @@ def trim_video(video_path, video_file_name, video_timestamps):
     trimmed_video_path = "/tmp/{}".format(trimmed_video_name)
     
     # Finds the indexes where the timestamps are split
-    first_split = video_timestamps.index("_")
-    second_split = video_timestamps.index("_", first_split+1)
+    first_split = video_timestamps.index("+")
+    second_split = video_timestamps.index("+", first_split+1)
     
     print("First \"+\" position:", first_split)
     print("Second \"+\" position:", second_split)
