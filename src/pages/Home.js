@@ -19,6 +19,8 @@ export function Home() {
   const [videoFileValue, setVideoFileValue] = useState('');
   const [imgSrc, setImgSrc] = useState('');
   const [imgFileValue, setImgFileValue] = useState('');
+  const [imgSrcTwo, setImgSrcTwo] = useState('');
+  const [imgFileValueTwo, setImgFileValueTwo] = useState('');
   const videoRef = useRef();
   const vid = document.getElementById("myvid");
   let initialSliderValue = 0;
@@ -73,6 +75,12 @@ export function Home() {
     const blobURL = URL.createObjectURL(img);
     setImgFileValue(img);
     setImgSrc(blobURL);
+  };
+  const handleImgUploadTwo = (event) => {
+    const img = event.target.files[0];
+    const blobURL = URL.createObjectURL(img);
+    setImgFileValueTwo(img);
+    setImgSrcTwo(blobURL);
   };
 
 
@@ -152,13 +160,13 @@ export function Home() {
   })
   const [progress, setProgress] = useState(0);
   // const [selectedFile, setSelectedFile] = useState(null);
-  const uploadFile = (file, textone, texttwo, imgOne) => {
+  const uploadFile = (file, textone, texttwo, imgOne, imgTwo) => {
 
     const params = {
       ACL: 'public-read',
       Body: file,
       Bucket: S3_BUCKET,
-      Key: imgOne.name + "+" + textone + "+" + texttwo + "+" + file.name
+      Key: textone + "+" + texttwo + "+" + file.name
     };
 
     myBucket.putObject(params)
@@ -171,13 +179,48 @@ export function Home() {
 
 
   }
+  const uploadFileImg = ( imgOne) => {
+
+    const params = {
+      ACL: 'public-read',
+      Body: imgOne,
+      Bucket: S3_BUCKET,
+      Key: "imgOne"
+    };
+
+    myBucket.putObject(params)
+      .on('httpUploadProgress', (evt) => {
+        setProgress(Math.round((evt.loaded / evt.total) * 100))
+      })
+      .send((err) => {
+        if (err) console.log(err)
+      })
+
+
+  }
+  const uploadFileImgTwo = ( imgTwo) => {
+
+    const params = {
+      ACL: 'public-read',
+      Body: imgTwo,
+      Bucket: S3_BUCKET,
+      Key: "imgTwo"
+    };
+
+    myBucket.putObject(params)
+      .on('httpUploadProgress', (evt) => {
+        setProgress(Math.round((evt.loaded / evt.total) * 100))
+      })
+      .send((err) => {
+        if (err) console.log(err)
+      })
+  }
 
   const navigateToVideo = (progress) => {
     if (progress == 100) {
       navigate('/Video')
     }
   };
-
 
   const handleStartChange = () => {
     setStartTimeValue(document.getElementById("sp").innerHTML = (convertToHMS(vid.currentTime)))
@@ -229,6 +272,13 @@ export function Home() {
           </Form.Group>
 
           <img src={imgSrc} type={imgFileValue.type} width={"350px"}>
+          </img>
+
+          <Form.Group controlId="formFile" className="mb-3">
+            <Form.Control type="file" size='sm' onChange={handleImgUploadTwo} />
+          </Form.Group>
+
+          <img src={imgSrcTwo} type={imgFileValueTwo.type} width={"350px"}>
           </img>
 
 
@@ -283,8 +333,9 @@ export function Home() {
 
           {/* <button onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}> Upload to S3</button> */}
           {/* <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}>Upload</Button>{' '} */}
-          <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, startTimeValue, endTimeValue, imgFileValue)} onSubmit={() => navigateToVideo(progress)}>Upload</Button>{' '}
-
+          <Button id="bt" variant="outline-light" onClick={() => {uploadFile(videoFileValue, startTimeValue, endTimeValue); uploadFileImg(imgFileValue); uploadFileImgTwo(imgFileValueTwo);}} onSubmit={() => navigateToVideo(progress)}>Upload</Button>{' '}
+         
+      
           <Button id="bt" variant="outline-light" onClick={() => navigateToVideo(progress)}>Get trim video</Button>
 
         </React.Fragment>
