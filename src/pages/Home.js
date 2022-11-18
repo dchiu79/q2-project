@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import '../App.css';
 import { Video } from './Video'
 import { useNavigate } from 'react-router-dom';
@@ -179,7 +181,7 @@ export function Home() {
 
 
   }
-  const uploadFileImg = ( imgOne) => {
+  const uploadFileImg = (imgOne) => {
 
     const params = {
       ACL: 'public-read',
@@ -198,7 +200,7 @@ export function Home() {
 
 
   }
-  const uploadFileImgTwo = ( imgTwo) => {
+  const uploadFileImgTwo = (imgTwo) => {
 
     const params = {
       ACL: 'public-read',
@@ -232,7 +234,7 @@ export function Home() {
   }
   return (
     <div className="App">
-      <Form.Group controlId="formFile" className="mb-3">
+      <Form.Group controlId="formFile" className="text-center">
         <Form.Control type="file" size='sm' onChange={handleFileUpload} />
       </Form.Group>
       {/* <input type="file" onChange={handleFileUpload} /> */}
@@ -267,22 +269,41 @@ export function Home() {
           <Button id="spt" variant="outline-primary" onClick={handleStartChange}>Get start time</Button>
           <Button id="ept" variant="outline-primary" onClick={handleEndChange}>Get end time</Button>
 
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Control type="file" size='sm' onChange={handleImgUpload} />
-          </Form.Group>
-
-          <img src={imgSrc} type={imgFileValue.type} width={"350px"}>
-          </img>
-
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Control type="file" size='sm' onChange={handleImgUploadTwo} />
-          </Form.Group>
-
-          <img src={imgSrcTwo} type={imgFileValueTwo.type} width={"350px"}>
-          </img>
 
 
-          {selectedImage && (
+          <Form>
+            <Row>
+              <Col>
+                <Form.Group controlId="formFile" className="mb-3">
+                  <Form.Control type="file" size='sm' onChange={handleImgUpload} />
+                  <Form.Text className="text-muted">
+                    Upload First Image
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="formFile" className="mb-3">
+                  <Form.Control type="file" size='sm' onChange={handleImgUploadTwo} />
+                  <Form.Text className="text-muted">
+                    Upload second Image
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+            </Row>
+          </Form>
+
+          <div id='imgDiv'>
+            <img src={imgSrc} type={imgFileValue.type} className="firstImg" >
+            </img>
+            <span> <img src={imgSrcTwo} type={imgFileValueTwo.type} className="secondImg">
+            </img></span>
+          </div>
+
+
+
+
+
+          {/* {selectedImage && (
             <div>
               <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
               <br />
@@ -324,7 +345,7 @@ export function Home() {
               }}
             />
 
-          </Button>
+          </Button> */}
 
           <div>
             <ProgressBar variant='pb' now={progress} label={`File Upload Progress ${progress}%`}></ProgressBar>
@@ -333,10 +354,10 @@ export function Home() {
 
           {/* <button onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}> Upload to S3</button> */}
           {/* <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}>Upload</Button>{' '} */}
-          <Button id="bt" variant="outline-light" onClick={() => {uploadFile(videoFileValue, startTimeValue, endTimeValue); uploadFileImg(imgFileValue); uploadFileImgTwo(imgFileValueTwo);}} onSubmit={() => navigateToVideo(progress)}>Upload</Button>{' '}
-         
-      
-          <Button id="bt" variant="outline-light" onClick={() => navigateToVideo(progress)}>Get trim video</Button>
+          <Button id="bt" variant="outline-light" onClick={() => { uploadFile(videoFileValue, startTimeValue, endTimeValue); uploadFileImg(imgFileValue); uploadFileImgTwo(imgFileValueTwo); }} onSubmit={() => navigateToVideo(progress)}>Upload</Button>{' '}
+
+
+          <Button id="bt" variant="outline-light" onClick={() => navigateToVideo(progress)}>Get Trim Video</Button>
 
         </React.Fragment>
       ) : (
