@@ -28,7 +28,7 @@ def trim_video(video_path, video_file_name, video_timestamps):
     print("End:", end_timestamp)
     
     # ffmpeg command to trim a video based on two timestamps
-    ffmpeg_cmd1 = "/opt/ffmpeglib/ffmpeg -y -ss {} -to {} -i {} -c:v copy -c:a copy {}".format(start_timestamp, end_timestamp, video_path, trimmed_video_path)
+    ffmpeg_cmd1 = "/opt/ffmpeg -y -ss {} -to {} -i {} -c:v copy -c:a copy {}".format(start_timestamp, end_timestamp, video_path, trimmed_video_path)
 
     # Makes the command executable and runs it
     cmd1 = shlex.split(ffmpeg_cmd1)

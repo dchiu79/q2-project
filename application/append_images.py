@@ -29,15 +29,15 @@ def append_images_to_video(video_file_name, trimmed_video_path, start_image_path
     print("end silent video path:", end_silent_video_path)
     
     # ffmpeg commands to create a 1 second still image video with silent audio for the start image
-    ffmpeg_cmd1 = "/opt/ffmpeglib/ffmpeg -y -loop 1 -i {} -t 1 -c:v copy {}".format(start_image_path, start_video_path)
-    ffmpeg_cmd2 = "/opt/ffmpeglib/ffmpeg -y -f lavfi -i anullsrc -i {} -c:v copy -shortest {}".format(start_video_path, start_silent_video_path)
+    ffmpeg_cmd1 = "/opt/ffmpeg -y -loop 1 -i {} -t 1 -c:v copy {}".format(start_image_path, start_video_path)
+    ffmpeg_cmd2 = "/opt/ffmpeg -y -f lavfi -i anullsrc -i {} -c:v copy -shortest {}".format(start_video_path, start_silent_video_path)
     
     # ffmpeg commands to create a 1 second still image video with silent audio for the end image
-    ffmpeg_cmd3 = "/opt/ffmpeglib/ffmpeg -y -loop 1 -i {} -t 1 -c:v copy {}".format(end_image_path, end_video_path)
-    ffmpeg_cmd4 = "/opt/ffmpeglib/ffmpeg -y -f lavfi -i anullsrc -i {} -c:v copy -shortest {}".format(end_video_path, end_silent_video_path)
+    ffmpeg_cmd3 = "/opt/ffmpeg -y -loop 1 -i {} -t 1 -c:v copy {}".format(end_image_path, end_video_path)
+    ffmpeg_cmd4 = "/opt/ffmpeg -y -f lavfi -i anullsrc -i {} -c:v copy -shortest {}".format(end_video_path, end_silent_video_path)
     
     # ffmpeg command to concatenate the trimmed video and the two still image videos
-    ffmpeg_cmd5 = "/opt/ffmpeglib/ffmpeg -y -i {} -i {} -i {} -filter_complex [0:v][0:a][1:v][1:a][2:v][2:a]concat=n=3:v=1:a=1[v][a] -map [v] -map [a] -fps_mode vfr {}"\
+    ffmpeg_cmd5 = "/opt/ffmpeg -y -i {} -i {} -i {} -filter_complex [0:v][0:a][1:v][1:a][2:v][2:a]concat=n=3:v=1:a=1[v][a] -map [v] -map [a] -fps_mode vfr {}"\
                     .format(start_silent_video_path, trimmed_video_path, end_silent_video_path, output_video_path)
 
     # Makes the commands executable and runs them

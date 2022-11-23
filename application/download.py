@@ -31,9 +31,9 @@ def download_objects_to_tmp(bucket, file_name):
     print("end image signed url:", s3_end_signed_url)
     
     # ffmpeg command to copy the video and images to the temporary directory 
-    ffmpeg_cmd1 = "/opt/ffmpeglib/ffmpeg -i {} -c:v copy -c:a copy {}".format(s3_video_signed_url, tmp_video_file_path)
-    ffmpeg_cmd2 = "/opt/ffmpeglib/ffmpeg -i {} {}".format(s3_start_signed_url, tmp_start_image_path)
-    ffmpeg_cmd3 = "/opt/ffmpeglib/ffmpeg -i {} {}".format(s3_end_signed_url, tmp_end_image_path)
+    ffmpeg_cmd1 = "/opt/ffmpeg -i {} -c:v copy -c:a copy {}".format(s3_video_signed_url, tmp_video_file_path)
+    ffmpeg_cmd2 = "/opt/ffmpeg -i {} {}".format(s3_start_signed_url, tmp_start_image_path)
+    ffmpeg_cmd3 = "/opt/ffmpeg -i {} {}".format(s3_end_signed_url, tmp_end_image_path)
     
     # Makes the commands executable and runs them
     cmd1 = shlex.split(ffmpeg_cmd1)
