@@ -20,13 +20,13 @@ def download_objects_to_tmp(bucket, file_name):
     
     # Creating path for start image file
     tmp_start_image_path = "/tmp/imgOne.jpg"
-    s3_start_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':'IMG-4340(2).jpg'}, ExpiresIn=120)
+    s3_start_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':'imgOne'}, ExpiresIn=120)
     print("start image path:", tmp_start_image_path)
     print("start image signed url:", s3_start_signed_url)
     
     # Creating path for end image file
     tmp_end_image_path = "/tmp/imgTwo.jpg"
-    s3_end_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':'IMG-4341(2).jpg'}, ExpiresIn=120)
+    s3_end_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':'imgTwo'}, ExpiresIn=120)
     print("end image path:", tmp_end_image_path)
     print("end image signed url:", s3_end_signed_url)
     

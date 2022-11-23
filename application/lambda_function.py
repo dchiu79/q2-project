@@ -5,6 +5,8 @@ import json
 import os
 import urllib
 
+import boto3
+
 # User defined functions
 from download import download_objects_to_tmp
 from video_trim import trim_video
@@ -13,6 +15,8 @@ from upload_to_s3 import upload_video_to_s3
 # from upload_video import upload_video_to_youtube
 
 print('Loading function')
+
+s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
 

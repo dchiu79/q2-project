@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import '../App.css';
 import { Video } from './Video'
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +21,8 @@ export function Home() {
   const [videoFileValue, setVideoFileValue] = useState('');
   const [imgSrc, setImgSrc] = useState('');
   const [imgFileValue, setImgFileValue] = useState('');
+  const [imgSrcTwo, setImgSrcTwo] = useState('');
+  const [imgFileValueTwo, setImgFileValueTwo] = useState('');
   const videoRef = useRef();
   const vid = document.getElementById("myvid");
   let initialSliderValue = 0;
@@ -73,6 +77,12 @@ export function Home() {
     const blobURL = URL.createObjectURL(img);
     setImgFileValue(img);
     setImgSrc(blobURL);
+  };
+  const handleImgUploadTwo = (event) => {
+    const img = event.target.files[0];
+    const blobURL = URL.createObjectURL(img);
+    setImgFileValueTwo(img);
+    setImgSrcTwo(blobURL);
   };
 
 
@@ -152,13 +162,13 @@ export function Home() {
   })
   const [progress, setProgress] = useState(0);
   // const [selectedFile, setSelectedFile] = useState(null);
-  const uploadFile = (file, textone, texttwo, imgOne) => {
+  const uploadFile = (file, textone, texttwo, imgOne, imgTwo) => {
 
     const params = {
       ACL: 'public-read',
       Body: file,
       Bucket: S3_BUCKET,
-      Key: imgOne.name + "+" + textone + "+" + texttwo + "+" + file.name
+      Key: textone + "+" + texttwo + "+" + file.name
     };
 
     myBucket.putObject(params)
@@ -171,13 +181,48 @@ export function Home() {
 
 
   }
+  const uploadFileImg = (imgOne) => {
+
+    const params = {
+      ACL: 'public-read',
+      Body: imgOne,
+      Bucket: S3_BUCKET,
+      Key: "imgOne"
+    };
+
+    myBucket.putObject(params)
+      .on('httpUploadProgress', (evt) => {
+        setProgress(Math.round((evt.loaded / evt.total) * 100))
+      })
+      .send((err) => {
+        if (err) console.log(err)
+      })
+
+
+  }
+  const uploadFileImgTwo = (imgTwo) => {
+
+    const params = {
+      ACL: 'public-read',
+      Body: imgTwo,
+      Bucket: S3_BUCKET,
+      Key: "imgTwo"
+    };
+
+    myBucket.putObject(params)
+      .on('httpUploadProgress', (evt) => {
+        setProgress(Math.round((evt.loaded / evt.total) * 100))
+      })
+      .send((err) => {
+        if (err) console.log(err)
+      })
+  }
 
   const navigateToVideo = (progress) => {
     if (progress == 100) {
       navigate('/Video')
     }
   };
-
 
   const handleStartChange = () => {
     setStartTimeValue(document.getElementById("sp").innerHTML = (convertToHMS(vid.currentTime)))
@@ -189,7 +234,7 @@ export function Home() {
   }
   return (
     <div className="App">
-      <Form.Group controlId="formFile" className="mb-3">
+      <Form.Group controlId="formFile" className="text-center">
         <Form.Control type="file" size='sm' onChange={handleFileUpload} />
       </Form.Group>
       {/* <input type="file" onChange={handleFileUpload} /> */}
@@ -224,15 +269,41 @@ export function Home() {
           <Button id="spt" variant="outline-primary" onClick={handleStartChange}>Get start time</Button>
           <Button id="ept" variant="outline-primary" onClick={handleEndChange}>Get end time</Button>
 
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Control type="file" size='sm' onChange={handleImgUpload} />
-          </Form.Group>
-
-          <img src={imgSrc} type={imgFileValue.type} width={"350px"}>
-          </img>
 
 
-          {selectedImage && (
+          <Form>
+            <Row>
+              <Col>
+                <Form.Group controlId="formFile" className="mb-3">
+                  <Form.Control type="file" size='sm' onChange={handleImgUpload} />
+                  <Form.Text className="text-muted">
+                    Upload First Image
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="formFile" className="mb-3">
+                  <Form.Control type="file" size='sm' onChange={handleImgUploadTwo} />
+                  <Form.Text className="text-muted">
+                    Upload second Image
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+            </Row>
+          </Form>
+
+          <div id='imgDiv'>
+            <img src={imgSrc} type={imgFileValue.type} className="firstImg" >
+            </img>
+            <span> <img src={imgSrcTwo} type={imgFileValueTwo.type} className="secondImg">
+            </img></span>
+          </div>
+
+
+
+
+
+          {/* {selectedImage && (
             <div>
               <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
               <br />
@@ -274,7 +345,7 @@ export function Home() {
               }}
             />
 
-          </Button>
+          </Button> */}
 
           <div>
             <ProgressBar variant='pb' now={progress} label={`File Upload Progress ${progress}%`}></ProgressBar>
@@ -283,9 +354,10 @@ export function Home() {
 
           {/* <button onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}> Upload to S3</button> */}
           {/* <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}>Upload</Button>{' '} */}
-          <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, startTimeValue, endTimeValue, imgFileValue)} onSubmit={() => navigateToVideo(progress)}>Upload</Button>{' '}
+          <Button id="bt" variant="outline-light" onClick={() => { uploadFile(videoFileValue, startTimeValue, endTimeValue); uploadFileImg(imgFileValue); uploadFileImgTwo(imgFileValueTwo); }} onSubmit={() => navigateToVideo(progress)}>Upload</Button>{' '}
 
-          <Button id="bt" variant="outline-light" onClick={() => navigateToVideo(progress)}>Get trim video</Button>
+
+          <Button id="bt" variant="outline-light" onClick={() => navigateToVideo(progress)}>Get Trim Video</Button>
 
         </React.Fragment>
       ) : (
