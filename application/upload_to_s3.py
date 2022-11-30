@@ -1,5 +1,6 @@
 import boto3
 
+# Initialize the s3 client
 s3 = boto3.client('s3')
 
 def upload_video_to_s3(output_video_name, output_video_path):

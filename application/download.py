@@ -15,18 +15,21 @@ def download_objects_to_tmp(bucket, file_name):
     # Creating path for video file
     tmp_video_file_path = "/tmp/{}".format(file_name)
     s3_video_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':file_name}, ExpiresIn=120)
+    
     print("video file path:", tmp_video_file_path)
     print("video signed url:", s3_video_signed_url)
     
     # Creating path for start image file
     tmp_start_image_path = "/tmp/imgOne.jpg"
-    s3_start_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':'imgOne'}, ExpiresIn=120)
+    s3_start_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':'imgOne.jpg'}, ExpiresIn=120)
+    
     print("start image path:", tmp_start_image_path)
     print("start image signed url:", s3_start_signed_url)
     
     # Creating path for end image file
     tmp_end_image_path = "/tmp/imgTwo.jpg"
-    s3_end_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':'imgTwo'}, ExpiresIn=120)
+    s3_end_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':'imgTwo.jpg'}, ExpiresIn=120)
+    
     print("end image path:", tmp_end_image_path)
     print("end image signed url:", s3_end_signed_url)
     
@@ -35,7 +38,7 @@ def download_objects_to_tmp(bucket, file_name):
     ffmpeg_cmd2 = "/opt/ffmpeg -i {} {}".format(s3_start_signed_url, tmp_start_image_path)
     ffmpeg_cmd3 = "/opt/ffmpeg -i {} {}".format(s3_end_signed_url, tmp_end_image_path)
     
-    # Makes the commands executable and runs them
+    # Prepare the commands to be run, then runs them
     cmd1 = shlex.split(ffmpeg_cmd1)
     cmd2 = shlex.split(ffmpeg_cmd2)
     cmd3 = shlex.split(ffmpeg_cmd3)
