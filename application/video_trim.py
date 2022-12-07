@@ -5,7 +5,7 @@ import subprocess
 # Import that handle file management
 import os
 
-def trim_video(video_path, video_file_name, video_timestamps):
+def trim_video(video_path, video_file_name):
     
     # Creates video name and path for a trimmed version
     trimmed_video_name = "trimmed_{}.mp4".format(video_file_name[:-4])
@@ -13,6 +13,10 @@ def trim_video(video_path, video_file_name, video_timestamps):
     
     print("Trimmed video name:", trimmed_video_name)
     print("Trimmed video path:", trimmed_video_path)
+
+    # Make the file name suitable for extracting timestamps in the right format
+    video_timestamps = video_file_name.replace("-", ":")
+    print("Changed file format:", video_timestamps)
     
     # Finds the indexes where the timestamps are split
     first_split = video_timestamps.index("_")

@@ -5,15 +5,10 @@ import subprocess
 # Import that handle file management
 import os
 
-import boto3
-
-# Initialize the s3 client
-s3 = boto3.client('s3')
-
 def append_images_to_video(video_file_name, trimmed_video_path, start_image_path, end_image_path):
     
     # Video name and path for the final output video after the trimming and appending
-    output_video_name = "output_{}".format(video_file_name)
+    output_video_name = "output_{}.mp4".format(video_file_name[:-4])
     output_video_path = "/tmp/{}".format(output_video_name)
     
     print("output video name:", output_video_name)
