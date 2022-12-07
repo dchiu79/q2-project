@@ -9,11 +9,12 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../App.css';
 import { Video } from './Video'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useHistory } from 'react-router-dom';
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 
 export function Home() {
+
   const [videoDuration, setVideoDuration] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [startTime, setStartTime] = useState(0);
@@ -31,7 +32,7 @@ export function Home() {
   const [startTimeValue, setStartTimeValue] = useState(0);
   const [endTimeValue, setEndTimeValue] = useState(0);
   const navigate = useNavigate();
-
+  const [nameFile, setNameFile] = useState('');
 
 
   // const [minValue, set_minValue] = useState(25);
@@ -69,6 +70,7 @@ export function Home() {
     const file = event.target.files[0];
     const blobURL = URL.createObjectURL(file);
     setVideoFileValue(file);
+    setNameFile(file.name);
     setVideoSrc(blobURL);
   };
 
@@ -219,9 +221,9 @@ export function Home() {
   }
 
   const navigateToVideo = (progress) => {
-    if (progress == 100) {
-      navigate('/Video')
-    }
+
+    navigate('/Video', { state: { id: nameFile } })
+
   };
 
   const handleStartChange = () => {
