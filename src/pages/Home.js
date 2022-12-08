@@ -33,6 +33,9 @@ export function Home() {
   const [endTimeValue, setEndTimeValue] = useState(0);
   const navigate = useNavigate();
   const [nameFile, setNameFile] = useState('');
+  const [imgFile, setImgFile] = useState('');
+  const [imgFileTwo, setImgFileTwo] = useState('');
+
 
 
   // const [minValue, set_minValue] = useState(25);
@@ -78,12 +81,14 @@ export function Home() {
     const img = event.target.files[0];
     const blobURL = URL.createObjectURL(img);
     setImgFileValue(img);
+    setImgFile(img.name);
     setImgSrc(blobURL);
   };
   const handleImgUploadTwo = (event) => {
     const img = event.target.files[0];
     const blobURL = URL.createObjectURL(img);
     setImgFileValueTwo(img);
+    setImgFileTwo(img.name);
     setImgSrcTwo(blobURL);
   };
 
@@ -105,7 +110,7 @@ export function Home() {
       seconds = '0' + seconds;
     }
     let time;
-    time = hours + ':' + minutes + ':' + seconds;
+    time = hours + '-' + minutes + '-' + seconds;
     return time;
   };
 
@@ -164,15 +169,21 @@ export function Home() {
   })
   const [progress, setProgress] = useState(0);
   // const [selectedFile, setSelectedFile] = useState(null);
-  const uploadFile = (file, textone, texttwo, imgOne, imgTwo) => {
+  const uploadFile = (file, textone, texttwo) => {
+
+    const imgNameFile = imgFile.replaceAll("100", "");
+    const underscore = imgNameFile.replaceAll("_", "")
+    const imgNameFileTwo = imgFileTwo.replaceAll("100", "");
+    const underscoreTwo = imgNameFileTwo.replaceAll("_", "");
 
     const params = {
       ACL: 'public-read',
       Body: file,
       Bucket: S3_BUCKET,
-      Key: textone + "+" + texttwo + "+" + file.name
+      Key: "100" + underscore + "100" + underscoreTwo + "_" + textone + "_" + texttwo + "_" + file.name
     };
-
+    // "100"firstimgname"100"secondimgname_firstTime_secondTime_file.name
+    //
     myBucket.putObject(params)
       .on('httpUploadProgress', (evt) => {
         setProgress(Math.round((evt.loaded / evt.total) * 100))
@@ -180,16 +191,18 @@ export function Home() {
       .send((err) => {
         if (err) console.log(err)
       })
-
-
   }
+  
+  
   const uploadFileImg = (imgOne) => {
 
+    const imgnameFile = imgFile.replaceAll("100", "");
+    const underscore = imgnameFile.replaceAll("_", "")
     const params = {
       ACL: 'public-read',
       Body: imgOne,
       Bucket: S3_BUCKET,
-      Key: "imgOne"
+      Key:  "100"+underscore
     };
 
     myBucket.putObject(params)
@@ -203,12 +216,13 @@ export function Home() {
 
   }
   const uploadFileImgTwo = (imgTwo) => {
-
+    const imgnameFile = imgFileTwo.replaceAll("100", "");  
+    const underscore = imgnameFile.replaceAll("_", "")
     const params = {
       ACL: 'public-read',
       Body: imgTwo,
       Bucket: S3_BUCKET,
-      Key: "imgTwo"
+      Key: "100"+underscore
     };
 
     myBucket.putObject(params)
@@ -220,12 +234,6 @@ export function Home() {
       })
   }
 
-  const navigateToVideo = (progress) => {
-
-    navigate('/Video', { state: { id: nameFile } })
-
-  };
-
   const handleStartChange = () => {
     setStartTimeValue(document.getElementById("sp").innerHTML = (convertToHMS(vid.currentTime)))
   }
@@ -234,6 +242,13 @@ export function Home() {
     setEndTimeValue(document.getElementById("ep").innerHTML = (convertToHMS(vid.currentTime)))
 
   }
+
+  const navigateToVideo = (progress) => {
+
+    navigate('/Video', { state: { id: nameFile, start: startTimeValue, end: endTimeValue } })
+
+  };
+
   return (
     <div className="App">
       <Form.Group controlId="formFile" className="text-center">

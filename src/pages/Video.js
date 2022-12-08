@@ -73,15 +73,17 @@ export function Video() {
   //     .then((data) => setMessage(data.message));
   // }, []);
 
-
-  const [image, setImage] = useState(null);
+  const [vidUrl, setVidUrl] = useState(null);
   useEffect(() => {
-    fetch(`${location.state.id}`)
+    const interval = setInterval(()=>{
+      fetch(`https://trimmed-video-tests3.s3.amazonaws.com/output_${location.state.start}_${location.state.end}_${location.state.id}`)
       .then(response => response.blob())
       .then(blob => {
-        const imageUrl = URL.createObjectURL(blob);
-        setImage(imageUrl);
+        const vid = URL.createObjectURL(blob);
+        setVidUrl(vid);
       });
+    }, 60000);
+    return()=> clearInterval(interval);
   }, []);
 
   return (
@@ -92,6 +94,7 @@ export function Video() {
     //     </video>
     // </div>
     <div className='card'>
+      <div>Please wait up to a minute for video to show up</div>
       {/* <div className='card-header'>Files from s3 bucket</div>
       <ul className='list-group'>
         {listFiles &&
@@ -102,8 +105,8 @@ export function Video() {
           ))}
       </ul> */}
 
-      <video src={image} controls={true}>
-        <source src={image} />
+      <video src={vidUrl} controls={true}>
+        <source src={vidUrl} />
       </video>
     </div>
 
