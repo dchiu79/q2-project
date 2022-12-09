@@ -17,8 +17,8 @@ def download_objects_to_tmp(bucket, file_key):
     second_split = file_key.index("100", first_split+1)
     third_split = file_key.index("_")
     
-    # Extract video file name from file key
-    video_file_name = file_key[third_split+1:]
+    # Extract video file name from file key and replace illegal file characters
+    video_file_name = file_key[third_split+1:].replace(":", "-").replace(" ", "")
     print("Video file name:", video_file_name)
     
     # Extract image file names from file key
@@ -28,7 +28,7 @@ def download_objects_to_tmp(bucket, file_key):
     print("End image name:", end_img_name)
     
     # Creating path for video file
-    tmp_video_file_path = "/tmp/{}".format(video_file_name.replace(" ", ""))
+    tmp_video_file_path = "/tmp/{}".format(video_file_name)
     s3_video_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':file_key}, ExpiresIn=120)
     
     print("video file path:", tmp_video_file_path)
