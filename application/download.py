@@ -28,21 +28,21 @@ def download_objects_to_tmp(bucket, file_key):
     print("End image name:", end_img_name)
     
     # Creating path for video file
-    tmp_video_file_path = "/tmp/{}".format(video_file_name)
+    tmp_video_file_path = "/tmp/{}".format(video_file_name.replace(" ", ""))
     s3_video_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':file_key}, ExpiresIn=120)
     
     print("video file path:", tmp_video_file_path)
     print("video signed url:", s3_video_signed_url)
     
     # Creating path for start image file
-    tmp_start_image_path = "/tmp/{}".format(start_img_name)
+    tmp_start_image_path = "/tmp/{}".format(start_img_name.replace(" ", ""))
     s3_start_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':start_img_name}, ExpiresIn=120)
     
     print("start image path:", tmp_start_image_path)
     print("start image signed url:", s3_start_signed_url)
     
     # Creating path for end image file
-    tmp_end_image_path = "/tmp/{}".format(end_img_name)
+    tmp_end_image_path = "/tmp/{}".format(end_img_name.replace(" ", ""))
     s3_end_signed_url = s3.generate_presigned_url('get_object', Params={'Bucket':bucket, 'Key':end_img_name}, ExpiresIn=120)
     
     print("end image path:", tmp_end_image_path)
