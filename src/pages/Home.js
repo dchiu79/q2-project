@@ -110,7 +110,7 @@ export function Home() {
       seconds = '0' + seconds;
     }
     let time;
-    time = hours + '-' + minutes + '-' + seconds;
+    time = hours + ':' + minutes + ':' + seconds;
     return time;
   };
 
@@ -169,21 +169,18 @@ export function Home() {
   })
   const [progress, setProgress] = useState(0);
   // const [selectedFile, setSelectedFile] = useState(null);
-  const uploadFile = (file, textone, texttwo) => {
+  const uploadFile = (file, start, end) => {
 
-    const imgNameFile = imgFile.replaceAll("100", "");
-    const underscore = imgNameFile.replaceAll("_", "")
-    const imgNameFileTwo = imgFileTwo.replaceAll("100", "");
-    const underscoreTwo = imgNameFileTwo.replaceAll("_", "");
+    const imgNameFile = imgFile.replaceAll("100", "").replaceAll("_", "");
+    const imgNameFileTwo = imgFileTwo.replaceAll("100", "").replaceAll("_", "");
 
     const params = {
       ACL: 'public-read',
       Body: file,
       Bucket: S3_BUCKET,
-      Key: "100" + underscore + "100" + underscoreTwo + "_" + textone + "_" + texttwo + "_" + file.name
+      Key: "100" + imgNameFile + "100" + imgNameFileTwo + "_" + start + "_" + end + "_" + file.name
     };
-    // "100"firstimgname"100"secondimgname_firstTime_secondTime_file.name
-    //
+
     myBucket.putObject(params)
       .on('httpUploadProgress', (evt) => {
         setProgress(Math.round((evt.loaded / evt.total) * 100))
@@ -196,13 +193,12 @@ export function Home() {
   
   const uploadFileImg = (imgOne) => {
 
-    const imgnameFile = imgFile.replaceAll("100", "");
-    const underscore = imgnameFile.replaceAll("_", "")
+    const imgnameFile = imgFile.replaceAll("100", "").replaceAll("_", "");
     const params = {
       ACL: 'public-read',
       Body: imgOne,
       Bucket: S3_BUCKET,
-      Key:  "100"+underscore
+      Key:  "100"+imgnameFile
     };
 
     myBucket.putObject(params)
@@ -216,13 +212,12 @@ export function Home() {
 
   }
   const uploadFileImgTwo = (imgTwo) => {
-    const imgnameFile = imgFileTwo.replaceAll("100", "");  
-    const underscore = imgnameFile.replaceAll("_", "")
+    const imgnameFile = imgFileTwo.replaceAll("100", "").replace("_", "");  
     const params = {
       ACL: 'public-read',
       Body: imgTwo,
       Bucket: S3_BUCKET,
-      Key: "100"+underscore
+      Key: "100"+imgnameFile
     };
 
     myBucket.putObject(params)
@@ -277,7 +272,7 @@ export function Home() {
 
           {/* <div>Start Point:{convertToHMS(minValue)}&nbsp; End Point:{convertToHMS(maxValue)} Video duration:{' '}
           {convertToHMS(endTime)} </div> */}
-          <div>Start Point:<span id="sp"></span> End Point:<span id="ep"></span></div>
+          <div>Start Point: <span id="sp"></span> End Point: <span id="ep"></span></div>
           {/* <Button id="spt" variant="outline-primary" onClick={()=>getStartTime()}>Get start time</Button>
           <Button id="ept" variant="outline-primary" onClick={()=>getEndTime()}>Get end time</Button> */}
           {/* <button onClick={handlePlay}>Play</button> &nbsp; */}
