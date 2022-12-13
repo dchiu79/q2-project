@@ -3,36 +3,12 @@ import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import React, { useState, useEffect } from "react"
 import AWS from "aws-sdk"
 import { useLocation } from 'react-router-dom';
-
+import { NavbarComp } from './NavbarComp'
+import './page.css'
 
 
 export function Video() {
-  const REGION = "us-east-1";
-  const creds = {
-    accessKeyId: '',
-    secretAccessKey: '',
 
-  };
-  const s3Client = new S3Client({ region: "us-east-1", credentials: creds })
-  AWS.config.update({
-    accessKeyId: '',
-    secretAccessKey: '',
-    region: "us-east-1"
-  })
-
-  const s3 = new AWS.S3();
-  const [posts, setPosts] = useState('');
-  // // Create an Amazon S3 service client object.
-  // const s3Client = new S3Client({ region: REGION });
-  const bucketParams = {
-
-    Bucket: "test-bucketvid",
-    Key: "maze.png"
-  };
-  const params = {
-    Bucket: 'test-bucketvid'
-
-  };
   const location = useLocation();
 
 
@@ -75,26 +51,22 @@ export function Video() {
 
   const [vidUrl, setVidUrl] = useState(null);
   useEffect(() => {
-    const interval = setInterval(()=>{
+    const interval = setInterval(() => {
       fetch(`https://trimmed-video-tests3.s3.amazonaws.com/output_${location.state.start}_${location.state.end}_${location.state.id}`)
-      .then(response => response.blob())
-      .then(blob => {
-        const vid = URL.createObjectURL(blob);
-        setVidUrl(vid);
-      });
-    }, 60000);
-    return()=> clearInterval(interval);
+        .then(response => response.blob())
+        .then(blob => {
+          const vid = URL.createObjectURL(blob);
+          setVidUrl(vid);
+        });
+    }, 20000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    // <div>
-    //     <img src="https://test-bucketvid.s3.amazonaws.com/maze.png" />
-    //     <video autoPlay={false} controls={true}>
-    //         <source src="https://test-bucketvid.s3.amazonaws.com/00%3A00%3A02%2B00%3A00%3A07%2Bfire.mp4" type="video/mp4" />
-    //     </video>
-    // </div>
-    <div className='card'>
-      <div>Please wait up to a minute for video to show up</div>
+
+    <div >
+      <NavbarComp></NavbarComp>
+      <div className="tx">Please wait up to a minute for video to show up</div>
       {/* <div className='card-header'>Files from s3 bucket</div>
       <ul className='list-group'>
         {listFiles &&
@@ -105,7 +77,7 @@ export function Video() {
           ))}
       </ul> */}
 
-      <video src={vidUrl} controls={true}>
+      <video className="vidSize" src={vidUrl} controls={true}>
         <source src={vidUrl} />
       </video>
     </div>

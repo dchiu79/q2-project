@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../App.css';
-import { Video } from './Video'
+import { NavbarComp } from './NavbarComp'
 import { useNavigate, useHistory } from 'react-router-dom';
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -148,19 +148,12 @@ export function Home() {
   //   }
   // };
 
-  //Play the video when the button is clicked
-  const handlePlay = () => {
-    if (videoRef && videoRef.current) {
-      videoRef.current.play();
-    }
-  };
-
   const S3_BUCKET = 'test-bucketvid';
   const REGION = 'us-east-1';
 
   AWS.config.update({
-    accessKeyId: '',
-    secretAccessKey: ''
+    accessKeyId: `${process.env.REACT_APP_API_KEY}`,
+    secretAccessKey: `${process.env.REACT_APP_API_SECRET_KEY}`
   })
 
   const myBucket = new AWS.S3({
@@ -189,8 +182,8 @@ export function Home() {
         if (err) console.log(err)
       })
   }
-  
-  
+
+
   const uploadFileImg = (imgOne) => {
 
     const imgnameFile = imgFile.replaceAll("100", "").replaceAll("_", "");
@@ -198,7 +191,7 @@ export function Home() {
       ACL: 'public-read',
       Body: imgOne,
       Bucket: S3_BUCKET,
-      Key:  "100"+imgnameFile
+      Key: "100" + imgnameFile
     };
 
     myBucket.putObject(params)
@@ -212,12 +205,12 @@ export function Home() {
 
   }
   const uploadFileImgTwo = (imgTwo) => {
-    const imgnameFile = imgFileTwo.replaceAll("100", "").replace("_", "");  
+    const imgnameFile = imgFileTwo.replaceAll("100", "").replace("_", "");
     const params = {
       ACL: 'public-read',
       Body: imgTwo,
       Bucket: S3_BUCKET,
-      Key: "100"+imgnameFile
+      Key: "100" + imgnameFile
     };
 
     myBucket.putObject(params)
@@ -244,9 +237,12 @@ export function Home() {
 
   };
 
+
   return (
     <div className="App">
-      <Form.Group controlId="formFile" className="text-center">
+
+      <NavbarComp />
+      <Form.Group controlId="formFile" className='fileForm'>
         <Form.Control type="file" size='sm' onChange={handleFileUpload} />
       </Form.Group>
       {/* <input type="file" onChange={handleFileUpload} /> */}
@@ -366,7 +362,7 @@ export function Home() {
 
           {/* <button onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}> Upload to S3</button> */}
           {/* <Button id="bt" variant="outline-light" onClick={() => uploadFile(videoFileValue, convertToHMS(minValue), convertToHMS(maxValue))}>Upload</Button>{' '} */}
-          <Button id="bt" variant="outline-light" onClick={() => { uploadFile(videoFileValue, startTimeValue, endTimeValue); uploadFileImg(imgFileValue); uploadFileImgTwo(imgFileValueTwo); }} onSubmit={() => navigateToVideo(progress)}>Upload</Button>{' '}
+          <Button id="bt" variant="outline-light" onClick={() => { uploadFile(videoFileValue, startTimeValue, endTimeValue); uploadFileImg(imgFileValue); uploadFileImgTwo(imgFileValueTwo); }} onSubmit={() => navigateToVideo(progress)}>Trim</Button>{' '}
 
 
           <Button id="bt" variant="outline-light" onClick={() => navigateToVideo(progress)}>Get Trim Video</Button>

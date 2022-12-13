@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { Home } from "./pages/Home"
 import { Video } from "./pages/Video"
-
+import { Welcome } from "./pages/Welcome"
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -20,7 +20,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Welcome />} />
+      <Route path="/home" element={<Home />} />
       <Route path="/video" element={<Video />} />
     </Routes>
   );

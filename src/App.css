@@ -1,6 +1,5 @@
 .App {
   text-align: center;
-  margin: 20px;
 }
 
 .App-header {
@@ -53,4 +52,8 @@ video {
 
 .mb-3 {
   padding: 10px;
+}
+
+.fileForm {
+  margin: 10px;
 }

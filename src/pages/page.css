@@ -1,0 +1,47 @@
+.navb {
+    background-color: rgb(72, 17, 118);
+}
+
+body {
+    background-color: rgb(105, 0, 160);
+    color: white;
+}
+
+.time {
+
+    font-size: 50px;
+    position: absolute;
+    top: 20%;
+    left: 37%;
+    margin: -25px 0 0 -25px;
+
+}
+
+.timeTwo {
+
+    font-size: 40px;
+    position: absolute;
+    top: 45%;
+    left: 6%;
+    margin: -25px 0 0 -25px;
+}
+
+.bt {
+    background-color: blueviolet;
+    border-color: blueviolet;
+    display: flex;
+    justify-content: center;
+}
+
+
+.tx {
+    font-size: 20px;
+    text-align: center;
+}
+
+.vidSize {
+    width: 30%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
