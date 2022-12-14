@@ -28,11 +28,11 @@ def lambda_handler(event, context):
     print("Bucket:", bucket)
     print("Video file key:", video_file_key)
 
-    video_path, video_file_name, start_image_path, end_image_path = download_objects_to_tmp(bucket, video_file_key)
+    video_path, video_file_name, start_image_path, end_image_path, startImageExist, endImageExist = download_objects_to_tmp(bucket, video_file_key)
     
     trimmed_video_path = trim_video(video_path, video_file_name)
     
-    output_video_name, output_video_path = append_images_to_video(video_file_name, trimmed_video_path, start_image_path, end_image_path)
+    output_video_name, output_video_path = append_images_to_video(video_file_name, trimmed_video_path, start_image_path, end_image_path, startImageExist, endImageExist)
     
     upload_video_to_s3(output_video_name, output_video_path)
     
