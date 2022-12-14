@@ -5,6 +5,7 @@
 body {
     background-color: rgb(105, 0, 160);
     color: white;
+    overflow-x: hidden;
 }
 
 .time {

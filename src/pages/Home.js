@@ -233,7 +233,11 @@ export function Home() {
 
   const navigateToVideo = (progress) => {
 
-    navigate('/Video', { state: { id: nameFile, start: startTimeValue, end: endTimeValue } })
+    if (progress === 100) {
+      navigate('/Video', { state: { id: nameFile, start: startTimeValue, end: endTimeValue } })
+    } else {
+      console.log("can't upload");
+    }
 
   };
 
