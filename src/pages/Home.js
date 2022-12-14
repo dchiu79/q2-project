@@ -102,8 +102,8 @@ export function Home() {
   const REGION = 'us-east-1';
 
   AWS.config.update({
-    accessKeyId: ,
-    secretAccessKey: 
+    accessKeyId: `${process.env.REACT_APP_API_KEY}`,
+    secretAccessKey: `${REACT_APP_API_SECRET_KEY}`
   })
 
   const myBucket = new AWS.S3({
