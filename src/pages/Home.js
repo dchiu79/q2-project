@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import MultiRangeSlider from "multi-range-slider-react";
 import AWS from 'aws-sdk'
 import 'bootstrap/dist/css/bootstrap.css';
 import ProgressBar from 'react-bootstrap/ProgressBar';
@@ -10,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 
 import '../App.css';
 import { NavbarComp } from './NavbarComp'
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -28,7 +27,6 @@ export function Home() {
   const [imgFileValueTwo, setImgFileValueTwo] = useState('');
   const videoRef = useRef();
   const vid = document.getElementById("myvid");
-  let initialSliderValue = 0;
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageTwo, setSelectedImageTwo] = useState(null);
   const [startTimeValue, setStartTimeValue] = useState(0);
@@ -103,7 +101,7 @@ export function Home() {
 
   AWS.config.update({
     accessKeyId: `${process.env.REACT_APP_API_KEY}`,
-    secretAccessKey: `${REACT_APP_API_SECRET_KEY}`
+    secretAccessKey: `${process.env.REACT_APP_API_SECRET_KEY}`
   })
 
   const myBucket = new AWS.S3({
@@ -249,54 +247,6 @@ export function Home() {
             <span> <img src={imgSrcTwo} type={imgFileValueTwo.type} className="secondImg">
             </img></span>
           </div>
-
-
-
-
-
-          {/* {selectedImage && (
-            <div>
-              <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
-              <br />
-              <Button variant='outline-danger' onClick={() => setSelectedImage(null)}>Remove</Button>
-            </div>
-          )}
-          <br />
-
-          <br />
-          <Button variant='dark'>
-            <input
-              type="file"
-              name="myImage"
-              onChange={(event) => {
-                console.log(event.target.files[0]);
-                setSelectedImage(event.target.files[0]);
-              }}
-            />
-          </Button>
-
-
-          {selectedImageTwo && (
-            <div>
-              <img alt="not found" width={"250px"} src={URL.createObjectURL(selectedImageTwo)} />
-              <br />
-              <Button variant='outline-danger' onClick={() => setSelectedImageTwo(null)}>Remove</Button>
-            </div>
-          )}
-          <br />
-
-          <br />
-          <Button variant='dark'>
-            <input
-              type="file"
-              name="myImage"
-              onChange={(event) => {
-                console.log(event.target.files[0])
-                setSelectedImageTwo(event.target.files[0]);
-              }}
-            />
-
-          </Button> */}
 
           <div>
             <ProgressBar variant='pb' now={progress} label={`File Upload Progress ${progress}%`}></ProgressBar>
