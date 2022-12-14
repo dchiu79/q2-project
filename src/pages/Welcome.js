@@ -25,7 +25,7 @@ export function Welcome() {
                 <p> Welcome to Jotto Video Trimmer</p>
             </div>
             <div className='timeTwo'> <strong>Instructions on how to use Video Trimmer</strong> <br></br> Upload a video. Set two time stamps. Set two image as thumbnails.
-                Upload the files and  Get trim video. <br></br>
+                Trim the file and  Get trim video. <br></br>
                 <Button className='bt' variant="dark" onClick={() => navigateToHome()}>Upload</Button>{' '}
             </div>
         </div>

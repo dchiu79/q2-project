@@ -7,9 +7,11 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+
 import '../App.css';
 import { NavbarComp } from './NavbarComp'
-import { useNavigate, useHistory } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
+
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 
@@ -36,37 +38,6 @@ export function Home() {
   const [imgFile, setImgFile] = useState('');
   const [imgFileTwo, setImgFileTwo] = useState('');
 
-
-
-  // const [minValue, set_minValue] = useState(25);
-  // const [maxValue, set_maxValue] = useState(75);
-  // const handleInput = (e) => {
-
-  //   set_minValue(e.minValue);
-  //   set_maxValue(e.maxValue);
-  // };
-
-
-  //Created to load script by passing the required script and append in head tag
-  const loadScript = (src) => {
-    return new Promise((onFulfilled, _) => {
-      const script = document.createElement('script');
-      let loaded;
-      script.async = 'async';
-      script.defer = 'defer';
-      script.setAttribute('src', src);
-      script.onreadystatechange = script.onload = () => {
-        if (!loaded) {
-          onFulfilled(script);
-        }
-        loaded = true;
-      };
-      script.onerror = function () {
-        console.log('Script failed to load');
-      };
-      document.getElementsByTagName('head')[0].appendChild(script);
-    });
-  };
 
   //Handle Upload of the video
   const handleFileUpload = (event) => {
@@ -127,33 +98,12 @@ export function Home() {
     }
   }, [videoSrc]);
 
-  //Called when handle of the nouislider is being dragged
-  // const updateOnSliderChange = (values, handle) => {
-  //   setVideoTrimmedUrl('');
-  //   let readValue;
-  //   if (handle) {
-  //     readValue = values[handle] | 0;
-  //     if (endTime !== readValue) {
-  //       setEndTime(readValue);
-  //     }
-  //   } else {
-  //     readValue = values[handle] | 0;
-  //     if (initialSliderValue !== readValue) {
-  //       initialSliderValue = readValue;
-  //       if (videoRef && videoRef.current) {
-  //         videoRef.current.currentTime = readValue;
-  //         setStartTime(readValue);
-  //       }
-  //     }
-  //   }
-  // };
-
   const S3_BUCKET = 'test-bucketvid';
   const REGION = 'us-east-1';
 
   AWS.config.update({
-    accessKeyId: `${process.env.REACT_APP_API_KEY}`,
-    secretAccessKey: `${process.env.REACT_APP_API_SECRET_KEY}`
+    accessKeyId: 'AKIAV6LX2FQIDE5LK7S2',
+    secretAccessKey: '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'
   })
 
   const myBucket = new AWS.S3({
@@ -257,17 +207,6 @@ export function Home() {
             <source src={videoSrc} type={videoFileValue.type} />
           </video>
           <br />
-          {/* <MultiRangeSlider
-          
-        min={0}
-        max={Math.floor(videoDuration)}
-        step={1}
-        minValue={startTime}
-        maxValue={videoDuration}
-        onInput={handleInput}
-        style={{barLeftColor:'purple'}}
-      /> */}
-
 
 
           {/* <div>Start Point:{convertToHMS(minValue)}&nbsp; End Point:{convertToHMS(maxValue)} Video duration:{' '}
