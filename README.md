@@ -1,6 +1,6 @@
 # Jotto Video Trimmer
 
-## Overview
+## Overview - site: https://q2-project.vercel.app/
 
 This project aims to create a prototype feature using React, Python, and AWS Services that will be integrated into the Jotto application developed by Quadrant 2. The feature is essentially a video trimmer with some additional add-ons.
 
